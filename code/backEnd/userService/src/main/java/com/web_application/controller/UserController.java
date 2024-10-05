@@ -2,28 +2,46 @@ package com.web_application.controller;
 
 import com.web_application.model.User;
 import com.web_application.service.Service;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
-    @Autowired
+
    private Service service;
+    @Autowired
+
+    public UserController(Service service){
+        this.service = service;
+    }
 
 
     @GetMapping("getAll")
-    public ResponseEntity<List<User>>  getUsers(){
+    public ResponseEntity<Object>  getUsers(){
         return service.getUsers();
+    }
+    @GetMapping("get/{id}")
+    public ResponseEntity<Object> getUser(@PathVariable Long id){
+        return service.getUser(id);
     }
 
     @PostMapping("create")
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        //User user = (User) request.getBody();
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User user){
         return service.createUser(user);
+    }
+
+    @PutMapping("update/{id}")
+    public ResponseEntity<Object> updateUser(@PathVariable Long id,@RequestBody User user){
+        return service.updateUser(id,user);
+    }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id){
+        return service.deleteUser(id);
     }
 
 }
